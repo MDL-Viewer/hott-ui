@@ -35,7 +35,7 @@ dependencies {
     implementation("org.openjfx:javafx-web:_")
     implementation("org.openjfx:javafx-web:_:$osPlatform")
     implementation("no.tornado:tornadofx:_")
-    implementation("de.treichels.hott:hott-util:_")
+    api("de.treichels.hott:hott-util:_")
 }
 
 semver {
