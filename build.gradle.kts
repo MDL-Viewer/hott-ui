@@ -1,5 +1,3 @@
-import com.google.gradle.osdetector.OsDetector
-
 plugins {
     kotlin("jvm")
     id("java-library")
@@ -20,8 +18,7 @@ repositories {
     }
 }
 
-val os = osdetector.os
-val os_platform = when (os) {
+val osPlatform = when (val os = osdetector.os) {
     "osx" -> "mac"
     "windows" -> "win"
     "linux" -> "linux"
@@ -29,18 +26,16 @@ val os_platform = when (os) {
 }
 
 dependencies {
-    api("org.openjfx:javafx-base:_")
-    api("org.openjfx:javafx-base:_:$os_platform")
-    api("org.openjfx:javafx-graphics:_")
-    api("org.openjfx:javafx-graphics:_:$os_platform")
-    api("org.openjfx:javafx-controls:_")
-    api("org.openjfx:javafx-controls:_:$os_platform")
-    api("org.openjfx:javafx-web:_")
-    api("org.openjfx:javafx-web:_:$os_platform")
-    api("org.openjfx:javafx-media:_")
-    api("org.openjfx:javafx-media:_:$os_platform")
-    api("no.tornado:tornadofx:_")
-    api("de.treichels.hott:hott-util:_")
+    implementation("org.openjfx:javafx-base:_")
+    implementation("org.openjfx:javafx-base:_:$osPlatform")
+    implementation("org.openjfx:javafx-graphics:_")
+    implementation("org.openjfx:javafx-graphics:_:$osPlatform")
+    implementation("org.openjfx:javafx-controls:_")
+    implementation("org.openjfx:javafx-controls:_:$osPlatform")
+    implementation("org.openjfx:javafx-web:_")
+    implementation("org.openjfx:javafx-web:_:$osPlatform")
+    implementation("no.tornado:tornadofx:_")
+    implementation("de.treichels.hott:hott-util:_")
 }
 
 semver {
