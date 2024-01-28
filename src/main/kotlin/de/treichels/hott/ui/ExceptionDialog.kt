@@ -1,19 +1,21 @@
 package de.treichels.hott.ui
 
 import javafx.scene.control.Alert
+import javafx.scene.control.Label
+import javafx.scene.control.TextArea
+import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 import javafx.stage.Stage
-import tornadofx.*
 import java.io.PrintWriter
 import java.io.StringWriter
 import java.util.logging.Logger
 
-class ExceptionDialog(throwable: Throwable) : Alert(Alert.AlertType.ERROR) {
+class ExceptionDialog(throwable: Throwable) : Alert(AlertType.ERROR) {
     init {
         Logger.getLogger(javaClass.name).throwing(javaClass.name, "<init>", throwable)
 
-        title ="Error"
-        (dialogPane.scene.window as Stage).icons += ResourceLookup(ExceptionDialog).image("icon.png")
+        title = "Error"
+        (dialogPane.scene.window as Stage).icons += ResourceLookup(ExceptionDialog::class).image("icon.png")
         headerText = null
 
         var message: String? = throwable.localizedMessage
@@ -26,20 +28,18 @@ class ExceptionDialog(throwable: Throwable) : Alert(Alert.AlertType.ERROR) {
         throwable.printStackTrace(PrintWriter(sw))
 
         // Set expandable Exception into the dialog pane.
-        dialogPane.expandableContent = gridpane {
+        dialogPane.expandableContent = GridPane().apply {
             maxWidth = Double.MAX_VALUE
-            label("The exception stacktrace was:") {
-                gridpaneConstraints { columnRowIndex(0, 0) }
+            Label("The exception stacktrace was:").apply {
+                add(this, 0, 0)
             }
-            textarea(sw.toString()) {
+            TextArea(sw.toString()).apply {
                 isEditable = false
                 isWrapText = true
                 maxWidth = Double.MAX_VALUE
                 maxHeight = Double.MAX_VALUE
-                gridpaneConstraints {
-                    columnRowIndex(0, 1)
-                    vhGrow = Priority.ALWAYS
-                }
+                add(this, 0, 1)
+                GridPane.setVgrow(this, Priority.ALWAYS)
             }
         }
     }

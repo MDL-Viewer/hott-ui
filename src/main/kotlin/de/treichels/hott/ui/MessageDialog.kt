@@ -3,22 +3,23 @@ package de.treichels.hott.ui
 import javafx.application.Platform
 import javafx.concurrent.Worker
 import javafx.scene.control.Alert
+import javafx.scene.web.WebView
 import javafx.stage.Stage
 import org.w3c.dom.Element
 import org.w3c.dom.events.EventTarget
-import tornadofx.*
 import java.awt.Desktop
 import java.net.URI
 
-class MessageDialog(alertType: Alert.AlertType, header: String, html: Boolean, message: String, vararg args: Any) : Alert(alertType) {
+class MessageDialog(alertType: AlertType, header: String, html: Boolean, message: String, vararg args: Any) :
+    Alert(alertType) {
     init {
-        (dialogPane.scene.window as Stage).icons += ResourceLookup(MessageDialog).image("icon.png")
+        (dialogPane.scene.window as Stage).icons += ResourceLookup(MessageDialog::class).image("icon.png")
         headerText = header
 
         val text = String.format(message, *args)
 
         if (html) {
-            dialogPane.content = webview {
+            dialogPane.content = WebView().apply {
                 prefHeight = 400.0
                 prefWidth = 400.0
                 engine.loadContent(text)
@@ -34,7 +35,11 @@ class MessageDialog(alertType: Alert.AlertType, header: String, html: Boolean, m
                             link.setAttribute("onclick", "return false;")
 
                             // instead, load the url using the system default web browser
-                            (link as EventTarget).addEventListener("click", { Desktop.getDesktop().browse(URI(url)) }, false)
+                            (link as EventTarget).addEventListener(
+                                "click",
+                                { Desktop.getDesktop().browse(URI(url)) },
+                                false
+                            )
                         }
                     }
                 }
@@ -43,14 +48,20 @@ class MessageDialog(alertType: Alert.AlertType, header: String, html: Boolean, m
             contentText = text
     }
 
-    constructor(alertType: Alert.AlertType, header: String, message: String, vararg args: Any) : this(alertType, header, false, message, *args)
+    constructor(alertType: AlertType, header: String, message: String, vararg args: Any) : this(
+        alertType,
+        header,
+        false,
+        message,
+        *args
+    )
 
     companion object {
-        fun show(alertType: Alert.AlertType, header: String, html: Boolean, message: String, vararg args: Any) {
+        fun show(alertType: AlertType, header: String, html: Boolean, message: String, vararg args: Any) {
             Platform.runLater { MessageDialog(alertType, header, html, message, *args).showAndWait() }
         }
 
-        fun show(alertType: Alert.AlertType, header: String, message: String, vararg args: Any) {
+        fun show(alertType: AlertType, header: String, message: String, vararg args: Any) {
             Platform.runLater { MessageDialog(alertType, header, false, message, *args).showAndWait() }
         }
     }

@@ -23,7 +23,6 @@ javafx {
 }
 
 dependencies {
-    implementation("no.tornado:tornadofx:_")
     api("de.treichels.hott:hott-util:_")
 }
 
